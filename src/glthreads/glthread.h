@@ -1,6 +1,7 @@
 #ifndef __GLTHREADS__
 #define __GLTHREADS__
 
+
 typedef struct glthread_node_ {
 
     struct glthread_node_ *left;
@@ -33,10 +34,7 @@ glthread_remove(glthread_t *lst, glthread_node_t *glnode);
     glnode->left = NULL;            \
     glnode->right = NULL;
 
-void
+void 
 init_glthread(glthread_t *glthread, unsigned int offset);
-
-#define offsetof(struct_name, field_name)   \
-    ((unsigned int)&((struct_name *)0)->field_name)
 
 #endif /* __GLTHREADS__ */
