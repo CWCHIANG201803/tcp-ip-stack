@@ -72,29 +72,28 @@ TEST(TestGraph, TestGiveInterfaceLinkNoNeighborNodeReturnNULL){
     EXPECT_EQ(rtn_node, nullptr);
 }
 
-TEST(TestGraph, TestGiveNULLNodeReturnNegativeCount){
+TEST(TestGraph, TestGiveNULLNodeReturnIdxNegative){
     node_t *node = NULL;
-    int count = get_node_intf_available_slot(node);
-    EXPECT_EQ(count, -1);
+    int idx = get_node_intf_available_slot(node);
+    EXPECT_EQ(idx, -1);
 }
 
-TEST(TestGraph, TestGiveNodeNULLInterfaceReturnCountEqMax){
+TEST(TestGraph, TestGiveNodeAllNULLInterfaceReturnIdxZero){
     node_t *node = (node_t*)malloc(sizeof(node_t));
     for(int i=0; i < MAX_INTF_PER_NODE; ++i)
         node->intf[i] = NULL;
 
-    int count = get_node_intf_available_slot(node);
+    int idx = get_node_intf_available_slot(node);
 
-    EXPECT_EQ(count, MAX_INTF_PER_NODE);
+    EXPECT_EQ(idx, 0);
 }
 
-TEST(TestGraph, TestGiveNodeInterfaceReturnCountLTMax){
+TEST(TestGraph, TestGiveNodeInterfaceReturnIdxNegative){
     node_t *node = (node_t*)malloc(sizeof(node_t));
     for(int i=0; i < MAX_INTF_PER_NODE; ++i)
-        node->intf[i] = NULL;
-    node->intf[0] = (interface_t*)malloc(sizeof(interface_t));
+        node->intf[i] = (interface_t*)malloc(sizeof(interface_t));
     
-    int count = get_node_intf_available_slot(node);
+    int idx = get_node_intf_available_slot(node);
 
-    EXPECT_LT(count, MAX_INTF_PER_NODE);
+    EXPECT_EQ(idx, -1);
 }

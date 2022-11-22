@@ -63,19 +63,15 @@ static inline node_t* get_nbr_node(interface_t* interface){
 // into which interface address could be stored
 static inline int get_node_intf_available_slot(node_t *node){
 
-    if(!node){
-        printf("invalid input\n");
+    if(!node)
         return -1;
-    }
 
-    unsigned int count = (int)MAX_INTF_PER_NODE;
     for(int i =0 ; i < MAX_INTF_PER_NODE; ++i){
         if(!node->intf[i])
-            break;
-        count--;
+            return i;
     }
 
-    return count <= 0 ? -1 : count;
+    return -1;
 }
 
 #endif
