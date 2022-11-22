@@ -2,6 +2,10 @@
 #define GRAPH_H
 
 #include "../glthreads/glthread.h"
+#include "stddef.h"
+#include "string.h"
+#include "stdio.h"
+#include "stdlib.h"
 
 #define NODE_NAME_SIZE      16
 #define IF_NAME_SIZE        16
@@ -10,13 +14,13 @@
 
 typedef struct node_ node_t;
 typedef struct link_ link_t;
+typedef struct graph_ graph_t;
 
 
-typedef struct interface_ {
-    char if_name[IF_NAME_SIZE];
-    struct node_ *att_node;
-    struct link_ *link;
-    
+typedef struct interface_ { // included in a node. a node may have many interfaces
+    char if_name[IF_NAME_SIZE]; // interface name
+    struct node_ *att_node; // attached node
+    struct link_ *link; // link with other interfaces
 } interface_t;
 
 struct link_ {
@@ -31,11 +35,47 @@ struct node_ {
     glthread_t graph_glue;
 };
 
-
-typedef struct graph_ {
+struct graph_ {
     char topology_name[32];
     glthread_t node_list;
 };
 
+// The function must return the pointer to the nbr node which is connected to the interface passes as an argument.
+static inline node_t* get_nbr_node(interface_t* interface){
+
+    if(!interface || !interface->att_node)
+        return NULL;
+
+    if(!interface->link || !interface->link->intf2.att_node)
+        return NULL;
+
+    struct link_* lnk = interface->link;
+    if(interface->att_node != lnk->intf1.att_node)
+        return lnk->intf1.att_node;
+    
+    if(interface->att_node != lnk->intf2.att_node)
+        return lnk->intf2.att_node;
+
+    return NULL;
+}
+
+// write a below function which returns an empty available slot (the index of the array) 
+// into which interface address could be stored
+static inline int get_node_intf_available_slot(node_t *node){
+
+    if(!node){
+        printf("invalid input\n");
+        return -1;
+    }
+
+    unsigned int count = (int)MAX_INTF_PER_NODE;
+    for(int i =0 ; i < MAX_INTF_PER_NODE; ++i){
+        if(!node->intf[i])
+            break;
+        count--;
+    }
+
+    return count <= 0 ? -1 : count;
+}
 
 #endif
