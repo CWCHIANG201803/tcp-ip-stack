@@ -16,7 +16,7 @@ typedef struct emp_ {
     unsigned int salary;
     char designation[30];
     unsigned int emp_id;
-    glthread_node_t glnode;
+    glthread_t glnode;
 } emp_t; 
 
 void print_emp_details(emp_t *emp){
@@ -33,7 +33,7 @@ TEST(TestGlthread, TestSample1)
     emp1->salary = 50000;
     strncpy(emp1->designation, "HR", strlen("HR"));
     emp1->emp_id = 21;
-    glthread_node_init((&emp1->glnode));
+    init_glthread(&emp1->glnode);
 
     ASSERT_FALSE(emp1->glnode.left != NULL);
     ASSERT_FALSE(emp1->glnode.right != NULL);
@@ -42,18 +42,22 @@ TEST(TestGlthread, TestSample1)
 TEST(TestGlthread, TestSample2)
 {
     /*Now Create a glthread*/
+    emp_t *emp1  = (emp_t *)calloc(1, sizeof(emp_t));
+    strncpy(emp1->name, "Neha", strlen("Neha"));
+    emp1->salary = 50000;
+    strncpy(emp1->designation, "HR", strlen("HR"));
+    emp1->emp_id = 21;
+    init_glthread(&emp1->glnode);
+
     glthread_t *emp_list = (glthread_t *)calloc(1, sizeof(glthread_t));
-    init_glthread(emp_list, offsetof(emp_t, glnode));
+    init_glthread(emp_list);
+    
+    glthread_add_next(emp_list, &emp1->glnode);
 
-    ASSERT_FALSE(emp_list->head!=NULL);
-    ASSERT_TRUE(emp_list->offset>0);
+    ASSERT_TRUE(emp_list->right!=NULL);
+    ASSERT_FALSE(emp_list->left!=NULL);
 
-
-    // emp_t *emp1  = (emp_t *)calloc(1, sizeof(emp_t));
-    // strncpy(emp1->name, "Neha", strlen("Neha"));
-    // emp1->salary = 50000;
-    // strncpy(emp1->designation, "HR", strlen("HR"));
-    // emp1->emp_id = 21;
-    // glthread_node_init((&emp1->glnode));
+    ASSERT_TRUE(emp1->glnode.left!=NULL);
+    ASSERT_FALSE(emp1->glnode.right!=NULL);
 
 }
