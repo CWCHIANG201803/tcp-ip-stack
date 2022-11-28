@@ -1,7 +1,8 @@
+#include "graph/graph.h"
 #include "net.h"
 
-bool node_set_loopback_address(node_t* node, char *ip_addr){
 
+bool node_set_loopback_address(node_t* node, char *ip_addr){
     return false;
 }
 

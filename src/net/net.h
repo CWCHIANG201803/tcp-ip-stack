@@ -1,9 +1,12 @@
-#ifndef __NET__
-#define __NET__
+#ifndef NET_H
+#define NET_H
 
 #include <stdlib.h>
 #include <string.h>
-#include "graph/graph.h"
+
+// forward declaration
+typedef struct graph_ graph_t;
+typedef struct node_ node_t;
 
 typedef struct ip_add_ {
     char ip_addr[16];
