@@ -15,7 +15,7 @@ add_executable(
     test_graph.cpp
 )
 
-target_link_libraries(test_graph gtest_main gmock_main glthreads)
+target_link_libraries(test_graph gtest_main gmock_main glthreads graph)
 
 add_test(
     NAME test_graph
