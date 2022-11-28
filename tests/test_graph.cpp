@@ -97,3 +97,76 @@ TEST(TestGraph, TestGiveNodeInterfaceReturnIdxNegative){
 
     EXPECT_EQ(idx, -1);
 }
+
+TEST(TestGraph, TestCreateGraphEmptyStringReturnNull){
+    char name[] = "";
+    graph_t* graph = create_new_graph(name);
+    EXPECT_FALSE(graph!=NULL);
+}
+
+TEST(TestGraph, TestCreateGraphNonEmptyNameReturnObject){
+    char name[]="test_graph";
+    graph_t* graph = create_new_graph(name);
+    EXPECT_TRUE(graph!=NULL);
+
+    EXPECT_EQ(strlen(graph->topology_name), strlen(name));
+    EXPECT_STREQ(graph->topology_name, name);
+    
+    EXPECT_FALSE(graph->node_list.left!=NULL);
+    EXPECT_FALSE(graph->node_list.right!=NULL);
+}
+
+TEST(TestGraph, TestCreateGraphNodeNonEmptyNameReturnObject){
+
+    char topology_name[]="test_graph";
+    graph_t* graph = create_new_graph(topology_name);
+
+    char node_name[] = "test_node";
+    node_t* node = create_graph_node(graph, node_name);
+
+    int offset = offsetof(node_t, graph_glue);
+    node_t* ret_node = (node_t*)((char*)(graph->node_list.right)-offset);
+
+    EXPECT_EQ(ret_node->node_name, node->node_name);
+    EXPECT_FALSE(graph->node_list.left!=NULL);
+}
+
+TEST(TestGraph, TestCreateGraphNodeNullGraphReturnNull){
+
+    graph_t* graph = NULL;
+
+    char node_name[] = "test_node";
+    node_t* node = create_graph_node(graph, node_name);
+
+    EXPECT_FALSE(node!=NULL);
+}
+
+TEST(TestGraph, TestCreateGraphEmptyNodeNameReturnNull){
+
+    char topology_name[]="test_graph";
+    graph_t* graph = create_new_graph(topology_name);
+
+    char node_name[] = "";
+    node_t* node = create_graph_node(graph, node_name);
+
+    EXPECT_FALSE(node!=NULL);
+}
+
+TEST(TestGraph, sample2){
+    char topology_name[]="test_graph";
+    graph_t* graph = create_new_graph(topology_name);
+
+    char name_node1[] = "node1";
+    node_t* node1 = create_graph_node(graph, name_node1);
+    
+    char name_node2[] = "node2";
+    node_t* node2 = create_graph_node(graph, name_node2);
+
+    char intf_name_from[] = "eth0/0";
+    char intf_name_to[] = "eth0/1";
+    insert_link_between_two_nodes(node1, node2, intf_name_from, intf_name_to, 1);
+
+    EXPECT_TRUE(node1->intf[0]!=NULL);
+    EXPECT_TRUE(node2->intf[0]!=NULL);
+
+}
