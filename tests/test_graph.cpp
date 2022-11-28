@@ -152,7 +152,7 @@ TEST(TestGraph, TestCreateGraphEmptyNodeNameReturnNull){
     EXPECT_FALSE(node!=NULL);
 }
 
-TEST(TestGraph, sample2){
+TEST(TestGraph, TestCreateNodeLinkReturnNormalObject){
     char topology_name[]="test_graph";
     graph_t* graph = create_new_graph(topology_name);
 
@@ -170,3 +170,34 @@ TEST(TestGraph, sample2){
     EXPECT_TRUE(node2->intf[0]!=NULL);
 
 }
+
+TEST(TestGraph, TestGiveNodeWithTwoIntfWithNameGetTargetNameIntf){
+    node_t* node = (node_t*)(malloc(sizeof(node_t)));
+    node->intf[0] = (interface_t*)(malloc(sizeof(interface_t)));
+    strncpy(node->intf[0]->if_name, "eth0", strlen("eth0"));
+    
+    node->intf[1] = (interface_t*)(malloc(sizeof(interface_t)));
+    strncpy(node->intf[1]->if_name, "eth1", strlen("eth1"));
+
+    char target_intf_name[] = "eth1";
+    interface_t* ret_intf = get_node_if_by_name(node, target_intf_name);
+
+    EXPECT_STREQ(ret_intf->if_name, "eth1");
+}
+
+TEST(TestGraph, TestGiveGraphAndNodeNameReturnNodeObject){
+    char topology_name[]="test_graph";
+    graph_t* graph = create_new_graph(topology_name);
+
+    char name_node1[] = "node1";
+    node_t* node1 = create_graph_node(graph, name_node1);
+    
+    char name_node2[] = "node2";
+    node_t* node2 = create_graph_node(graph, name_node2);
+
+    char target_node_name[] = "node2";
+    node_t* ret_node = get_node_by_node_name(graph, target_node_name);
+
+    EXPECT_STREQ(ret_node->node_name, "node2");
+}
+
