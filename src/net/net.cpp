@@ -71,3 +71,56 @@ bool node_unset_intf_ip_address(node_t *node, char *local_if)
 
     return false;
 }
+
+// display the entire network topology with networking properties
+void dump_nw_graph(graph_t *graph)
+{
+
+    node_t *node;
+    glthread_t *curr;
+    interface_t *interface;
+    unsigned int i;
+
+    printf("Topology Name = %s\n", graph->topology_name);
+
+    ITERATE_GLTHREAD_BEGIN(&graph->node_list, curr)
+    {
+
+        node = graph_glue_to_node(curr);
+        dump_node_nw_props(node);
+        for (i = 0; i < MAX_INTF_PER_NODE; i++)
+        {
+            interface = node->intf[i];
+            if (!interface)
+                break;
+            dump_intf_props(interface);
+        }
+    }
+    ITERATE_GLTHREAD_END(&graph->node_list, curr);
+}
+
+void dump_node_nw_props(node_t *node)
+{
+
+    printf("\nNode Name = %s\n", node->node_name);
+    if (node->node_nw_prop.is_lb_addr_config)
+    {
+        printf("\t  lo addr : %s/32", NODE_LO_ADDR(node));
+    }
+    printf("\n");
+}
+
+void dump_intf_props(interface_t *interface)
+{
+
+    dump_interface(interface);
+
+    if (interface->intf_nw_props.is_ipadd_config)
+    {
+        printf("\t IP Addr = %s/%u", IF_IP(interface), interface->intf_nw_props.mask);
+        printf("\t MAC : %u:%u:%u:%u:%u:%u\n",
+                IF_MAC(interface)[0], IF_MAC(interface)[1],
+                IF_MAC(interface)[2], IF_MAC(interface)[3],
+                IF_MAC(interface)[4], IF_MAC(interface)[5]);
+    }
+}
