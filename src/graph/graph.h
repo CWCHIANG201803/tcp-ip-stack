@@ -49,6 +49,12 @@ node_t* create_graph_node(graph_t* graph, char* node_name);
 void insert_link_between_two_nodes(node_t* node1, node_t* node2, char* from_if_name,char* to_if_name, unsigned int cost);
 
 
+static inline node_t* graph_glue_to_node(glthread_t * glthread){
+    int offset = offsetof(node_t, graph_glue);
+    node_t* ret_node = (node_t*)((char*)(glthread)-offset);
+    return ret_node;
+}
+
 // The function must return the pointer to the nbr node which is connected to the interface passes as an argument.
 static inline node_t* get_nbr_node(interface_t* interface){
 
