@@ -112,5 +112,9 @@ static inline node_t* get_node_by_node_name(graph_t *topo, char *node_name){
 
     return NULL;
 }
+// display graph/ node / interface
+void dump_graph(graph_t *graph);
+void dump_node(node_t *node);
+void dump_interface(interface_t *interface);
 
 #endif

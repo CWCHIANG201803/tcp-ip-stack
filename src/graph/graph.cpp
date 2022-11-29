@@ -60,3 +60,44 @@ void insert_link_between_two_nodes(node_t *node1, node_t *node2, char *from_if_n
     node2->intf[empty_intf_slot] = &lnk->intf2;
 }
 
+
+void dump_graph(graph_t *graph)
+{
+
+    node_t *node;
+    glthread_t *curr;
+
+    printf("Topology Name = %s\n", graph->topology_name);
+
+    ITERATE_GLTHREAD_BEGIN(&graph->node_list, curr)
+    {
+        node = graph_glue_to_node(curr);
+        dump_node(node);
+    }
+    ITERATE_GLTHREAD_END(&graph->node_list, curr);
+}
+
+void dump_node(node_t *node){
+    unsigned int i = 0;
+    interface_t *intf;
+
+    printf("Node Name = %s : \n", node->node_name);
+    for (; i < MAX_INTF_PER_NODE; i++){
+        intf = node->intf[i];
+        if (!intf)
+            break;
+        dump_interface(intf);
+    }
+}
+
+void dump_interface(interface_t *interface)
+{
+    link_t *link = interface->link;
+    node_t *nbr_node = get_nbr_node(interface);
+
+    printf("Interface Name = %s\n\tNbr Node %s, Local Node : %s, cost = %u\n",
+            interface->if_name,
+            nbr_node->node_name,
+            interface->att_node->node_name,
+            link->cost);
+}
