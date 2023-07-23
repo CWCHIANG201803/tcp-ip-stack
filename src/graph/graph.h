@@ -93,7 +93,7 @@ static inline int get_node_intf_available_slot(node_t *node){
 static inline interface_t* get_node_if_by_name(node_t *node, char *if_name){
 
     for(int idx=0; idx < MAX_INTF_PER_NODE; ++idx){
-        if(strcmp(node->intf[idx]->if_name, if_name)==0)
+        if(node->intf[idx]!=NULL && strcmp(node->intf[idx]->if_name, if_name)==0)
             return node->intf[idx];
     }
     return NULL;
