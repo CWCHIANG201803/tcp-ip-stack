@@ -175,11 +175,13 @@ TEST(TestGraph, TestGiveNodeWithTwoIntfWithNameGetTargetNameIntf){
     node_t* node = (node_t*)(malloc(sizeof(node_t)));
     node->intf[0] = (interface_t*)(malloc(sizeof(interface_t)));
     strncpy(node->intf[0]->if_name, "eth0", strlen("eth0"));
-    
+    node->intf[0]->if_name[strlen("eth0")]='\0';
+
     node->intf[1] = (interface_t*)(malloc(sizeof(interface_t)));
     strncpy(node->intf[1]->if_name, "eth1", strlen("eth1"));
+    node->intf[1]->if_name[strlen("eth1")]='\0';
 
-    char target_intf_name[] = "eth1";
+    char target_intf_name[] = "eth1";   // contains '\0' implicitly
     interface_t* ret_intf = get_node_if_by_name(node, target_intf_name);
 
     EXPECT_STREQ(ret_intf->if_name, "eth1");
