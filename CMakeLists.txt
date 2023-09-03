@@ -24,7 +24,7 @@ endif()
 
 add_subdirectory(src)
 add_subdirectory(tests)
-add_subdirectory(googletest)
+add_subdirectory(third_party)
 enable_testing()
 
 add_executable(main main.c)
