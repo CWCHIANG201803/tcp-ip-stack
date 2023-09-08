@@ -22,3 +22,15 @@ add_test(
     COMMAND ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}/test_graph
 )
 
+add_executable(
+    test_utils
+    test_utils.cpp
+)
+
+target_link_libraries(test_utils gtest_main gmock_main glthreads utils)
+
+add_test(
+    NAME test_utils
+    COMMAND ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}/test_utils
+)
+
