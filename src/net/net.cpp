@@ -126,29 +126,9 @@ void dump_intf_props(interface_t *interface)
                 IF_MAC(interface)[4], IF_MAC(interface)[5]);
     }
 }
-/*
-Write a below API in net.h/net.c which returns the pointer to local interface of a node such that this local interface shares the same subnet as that of ip_addr passed as 2nd argument.
 
-interface_t *
-
-node_get_matching_subnet_interface(node_t *node, char *ip_addr);
-
-
-
-For example :
-    For node R0 containing two local interfaces with ip/mask configured as : 40.1.1.1/24 on eth0/4 and 20.1.1.1/24 on eth0/0,  this API must return :
-    pointer to eth0/4 if ip_addr passed is 40.1.1.x, for all x [0-255]
-    pointer to eth0/0 if ip_addr passed is 20.1.1.x, for all x [0-255]
-    NULL otherwise.
-*/
 interface_t* node_get_matching_subnet_interface(node_t* node, char* ip_addr){
 
-    // use apply_mask on
-    // 1. ip_addr --> str_prefix_input_ip
-    // 2. addr for interfaces kept by the node  --> str_prefix_intf
-
-    // compare if str_prefix_input_ip is same as str_prefix_intf
-    // if it is true, return the interface, otherwise, return nullptr
     if(!node){
         throw std::invalid_argument("invalid input node");
         return nullptr;
