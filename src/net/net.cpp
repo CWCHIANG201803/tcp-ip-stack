@@ -1,5 +1,5 @@
-#include "graph/graph.h"
 #include "net.h"
+#include "graph/graph.h"
 
 /*Just some Random number generator*/
 // ref: https://github.com/sachinites/tcpip_stack/blob/master/net.c
@@ -123,4 +123,8 @@ void dump_intf_props(interface_t *interface)
                 IF_MAC(interface)[2], IF_MAC(interface)[3],
                 IF_MAC(interface)[4], IF_MAC(interface)[5]);
     }
+}
+
+interface_t* node_get_matching_subnet_interface(node_t* node, char* ip_addr){
+    return nullptr;
 }

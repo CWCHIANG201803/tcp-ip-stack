@@ -34,3 +34,15 @@ add_test(
     COMMAND ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}/test_utils
 )
 
+add_executable(
+    test_net
+    test_net.cpp
+)
+
+target_link_libraries(test_net gtest_main gmock_main glthreads net)
+
+add_test(
+    NAME test_net
+    COMMAND ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}/test_net
+)
+

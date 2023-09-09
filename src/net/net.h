@@ -5,6 +5,7 @@
 #include <string.h>
 #include "assert.h"
 
+
 // forward declaration
 typedef struct graph_ graph_t;
 typedef struct node_ node_t;
@@ -54,5 +55,7 @@ bool node_unset_intf_ip_address(node_t* node, char* local_if);
 void dump_nw_graph(graph_t* graph);
 void dump_node_nw_props(node_t *node);
 void dump_intf_props(interface_t *interface);
+
+interface_t* node_get_matching_subnet_interface(node_t* node, char* ip_addr);
 
 #endif
