@@ -4,12 +4,27 @@
 #include <bitset>
 #include <sstream>
 #include <iostream>
+#include <stdexcept>
+#include <regex>
+#include <cassert>
 
 void apply_mask(char* prefix, char mask, char* str_prefix){
     int num_of_mask = int(mask);
 
-    if(!prefix || strlen(prefix)==0)
+    if(!prefix || strlen(prefix)==0 || !validate_prefix(prefix)){
+        throw std::invalid_argument("invalid input prefix");
         return;
+    }
+
+    if(!str_prefix){
+        throw std::invalid_argument("invalid str_prefix");
+        return;
+    }
+
+    if(int(mask) < 0 || int(mask) > 32){
+        throw std::out_of_range("mask is out of range");
+        return;
+    }
 
     std::vector<std::bitset<8>> prefix_bitsets;
     std::istringstream iss(prefix);
@@ -30,4 +45,10 @@ void apply_mask(char* prefix, char mask, char* str_prefix){
     }
 
     strcpy(str_prefix, out.str().c_str());
+    assert(strlen(str_prefix) > 0 && validate_prefix(str_prefix));
+}
+
+bool validate_prefix(const char* input){
+    std::regex pattern("(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])");
+    return std::regex_match(input, pattern);
 }
