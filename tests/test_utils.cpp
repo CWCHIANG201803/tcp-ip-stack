@@ -63,6 +63,24 @@ TEST(TestUtils, GiveMaskBoundaryValueValidRangeReturnExpectedValue){
     ASSERT_STREQ(str_prefix_1, "122.1.1.1");
 }
 
+
+TEST(TestUtils, GiveValidInputReturnValidMAXAddress){
+    constexpr int len = 6;
+    char* mac_array = (char*)malloc(sizeof(char)*(len+1));
+    mac_array[len] = '\0';
+    layer2_fill_with_broadcast_mac(mac_array);
+    ASSERT_STREQ(mac_array, "\xFF\xFF\xFF\xFF\xFF\xFF");
+}
+
+TEST(TestUtils, GiveInValidInputReturnThrowInvalidArgumentException){
+    char* mac_array = nullptr;
+    ASSERT_THROW(layer2_fill_with_broadcast_mac(mac_array), std::invalid_argument);
+
+    constexpr int len = 7;
+    char* mac_array_1 = (char*)malloc(sizeof(char)*(len+1));
+    ASSERT_THROW(layer2_fill_with_broadcast_mac(mac_array_1), std::invalid_argument);
+}
+
 class TestUtils : public ::testing::TestWithParam<std::tuple<const char*, bool>> {};
 
 TEST_P(TestUtils, GiveInputStrReturnValidateIpPrefix){
