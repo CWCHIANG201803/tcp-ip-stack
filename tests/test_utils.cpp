@@ -13,9 +13,9 @@ TEST(TestUtils, TestOnApplyMask){
     // arrange
     char prefix[] = "122.1.1.1";
     char mask = 24;
-    char* str_prefix = nullptr;
+    char* str_prefix = (char*)malloc(sizeof(prefix));
     // act
     apply_mask(prefix, mask, str_prefix);
     // assert
-    ASSERT_EQ(str_prefix, "122.1.1.0");
+    ASSERT_STREQ(str_prefix, "122.1.1.0");
 }
