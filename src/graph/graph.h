@@ -18,6 +18,12 @@ typedef struct link_ link_t;
 
 
 typedef struct interface_ { // included in a node. a node may have many interfaces
+    interface_(){
+        strcpy(if_name, "");
+        att_node = nullptr;
+        link = nullptr;
+        intf_nw_props = intf_nw_props_t();
+    }
     char if_name[IF_NAME_SIZE]; // interface name
     struct node_ *att_node; // attached node
     struct link_ *link; // link with other interfaces
@@ -25,12 +31,25 @@ typedef struct interface_ { // included in a node. a node may have many interfac
 } interface_t;
 
 struct link_ {
+    link_() {
+        intf1 = interface_t();
+        intf2 = interface_t();
+        cost = 0;
+    }
+    link_(interface_t i1, interface_t i2) : intf1(i1), intf2(i2){}
     interface_t intf1;
     interface_t intf2;
     unsigned int cost;
 };
 
 struct node_ {
+    node_(){
+        strcpy(node_name, "");
+        for(int i=0; i < MAX_INTF_PER_NODE; ++i)
+            intf[i] = nullptr;
+        graph_glue = glthread_t();
+        node_nw_prop = node_nw_prop_t();
+    }
     char node_name[NODE_NAME_SIZE];
     interface_t *intf[MAX_INTF_PER_NODE];
     glthread_t graph_glue;
@@ -46,8 +65,8 @@ struct graph_ {
 
 graph_t* create_new_graph(char* topology_name);
 node_t* create_graph_node(graph_t* graph, char* node_name);
-void insert_link_between_two_nodes(node_t* node1, node_t* node2, char* from_if_name,char* to_if_name, unsigned int cost);
 
+void insert_link_between_two_nodes(node_t* node1, node_t* node2, char* from_if_name,char* to_if_name, unsigned int cost);
 
 static inline node_t* graph_glue_to_node(glthread_t * glthread){
     int offset = offsetof(node_t, graph_glue);

@@ -12,14 +12,24 @@ typedef struct node_ node_t;
 typedef struct interface_ interface_t;
 
 typedef struct ip_add_ {
+    ip_add_(){
+        strcpy(ip_addr, "");
+    }
     char ip_addr[16];
 } ip_add_t;
 
 typedef struct mac_add_ {
+    mac_add_(){
+        strcpy(mac, "");
+    }
     char mac[8];
 } mac_add_t;
 
 typedef struct node_nw_prop_ {
+    node_nw_prop_(){
+        is_lb_addr_config = false;
+        lb_addr = ip_add_t();
+    }
     bool is_lb_addr_config;
     ip_add_t lb_addr;
 } node_nw_prop_t;
@@ -30,6 +40,12 @@ static inline void init_node_nw_prop(node_nw_prop_t* node_nw_prop) {
 }
 
 typedef struct intf_nw_props_ {
+    intf_nw_props_() {
+        strcpy(mac_add.mac, "");
+        is_ipadd_config = false;
+        strcpy(ip_add.ip_addr, "");
+        mask = 0x0;
+    }
     mac_add_t mac_add;
     bool is_ipadd_config;
     ip_add_t ip_add;

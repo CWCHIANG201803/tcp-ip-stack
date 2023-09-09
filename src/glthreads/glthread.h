@@ -34,7 +34,7 @@
 #define __GLUETHREAD__
 
 typedef struct _glthread{
-
+    _glthread() : left(nullptr), right(nullptr) {}
     struct _glthread *left;
     struct _glthread *right;
 } glthread_t;

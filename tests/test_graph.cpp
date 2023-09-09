@@ -10,20 +10,20 @@
 
 
 TEST(TestGraph, TestCorrectConfigReturnNeighborNodeName){
-    interface_t* intf_n0_0 = (interface_t*)malloc(sizeof(interface_t));
-    intf_n0_0->att_node = (node_t*)malloc(sizeof(node_t));
+    interface_t* intf_n0_0 = new interface_t();
+    intf_n0_0->att_node = new node_t();
     strcpy(intf_n0_0->att_node->node_name, "node0");
     strcpy(intf_n0_0->if_name, "interface0_n0");
     intf_n0_0->att_node->intf[0] = intf_n0_0;
 
-    interface_t* intf_n1_0 = (interface_t*)malloc(sizeof(interface_t));
-    intf_n1_0->att_node = (node_t*)malloc(sizeof(node_t));
+    interface_t* intf_n1_0 = new interface_t();
+    intf_n1_0->att_node = new node_t();
 
     strcpy(intf_n1_0->att_node->node_name, "node1");
     strcpy(intf_n1_0->if_name, "interface0_n1");
     intf_n1_0->att_node->intf[0] = intf_n1_0;
 
-    link_t lnk = { *intf_n0_0, *intf_n1_0 };
+    link_t lnk(*intf_n0_0, *intf_n1_0);
     intf_n0_0->link = &lnk;
     intf_n1_0->link = &lnk;
 
@@ -39,7 +39,7 @@ TEST(TestGraph, TestNULLInterfaceReturnNULL){
 }
 
 TEST(TestGraph, TestGiveInterfaceNoLinkReturnNULL){
-    interface_t* intf_n_0 = (interface_t*)malloc(sizeof(interface_t));
+    interface_t* intf_n_0 = new interface_t();
     intf_n_0->link = NULL;
 
     node_t* rtn_node = get_nbr_node(intf_n_0);
@@ -48,7 +48,7 @@ TEST(TestGraph, TestGiveInterfaceNoLinkReturnNULL){
 }
 
 TEST(TestGraph, TestGiveInterfaceNoAttachNodeReturnNULL){
-    interface_t* intf_n_0 = (interface_t*)malloc(sizeof(interface_t));
+    interface_t* intf_n_0 = new interface_t();
     intf_n_0->att_node = NULL;
 
     node_t* rtn_node = get_nbr_node(intf_n_0);
@@ -58,13 +58,14 @@ TEST(TestGraph, TestGiveInterfaceNoAttachNodeReturnNULL){
 
 TEST(TestGraph, TestGiveInterfaceLinkNoNeighborNodeReturnNULL){
 
-    interface_t* intf_n0_0 = (interface_t*)malloc(sizeof(interface_t));
-    intf_n0_0->att_node = (node_t*)malloc(sizeof(node_t));
+    interface_t* intf_n0_0 = new interface_t();
+    intf_n0_0->att_node = new node_t();
 
-    interface_t* intf_n1_0 = (interface_t*)malloc(sizeof(interface_t));
+    interface_t* intf_n1_0 = new interface_t();
     intf_n1_0->att_node = NULL;
     
-    link_t lnk = { *intf_n0_0, *intf_n1_0 };
+    link_t lnk(*intf_n0_0, *intf_n1_0);
+    
     intf_n0_0->link = &lnk;
 
     node_t* rtn_node = get_nbr_node(intf_n0_0);
@@ -79,7 +80,7 @@ TEST(TestGraph, TestGiveNULLNodeReturnIdxNegative){
 }
 
 TEST(TestGraph, TestGiveNodeAllNULLInterfaceReturnIdxZero){
-    node_t *node = (node_t*)malloc(sizeof(node_t));
+    node_t *node = new node_t();
     for(int i=0; i < MAX_INTF_PER_NODE; ++i)
         node->intf[i] = NULL;
 
@@ -89,9 +90,9 @@ TEST(TestGraph, TestGiveNodeAllNULLInterfaceReturnIdxZero){
 }
 
 TEST(TestGraph, TestGiveNodeInterfaceReturnIdxNegative){
-    node_t *node = (node_t*)malloc(sizeof(node_t));
+    node_t *node = new node_t();
     for(int i=0; i < MAX_INTF_PER_NODE; ++i)
-        node->intf[i] = (interface_t*)malloc(sizeof(interface_t));
+        node->intf[i] =  new interface_t();
     
     int idx = get_node_intf_available_slot(node);
 
@@ -158,7 +159,7 @@ TEST(TestGraph, TestCreateNodeLinkReturnNormalObject){
 
     char name_node1[] = "node1";
     node_t* node1 = create_graph_node(graph, name_node1);
-    
+
     char name_node2[] = "node2";
     node_t* node2 = create_graph_node(graph, name_node2);
 
@@ -172,12 +173,12 @@ TEST(TestGraph, TestCreateNodeLinkReturnNormalObject){
 }
 
 TEST(TestGraph, TestGiveNodeWithTwoIntfWithNameGetTargetNameIntf){
-    node_t* node = (node_t*)(malloc(sizeof(node_t)));
-    node->intf[0] = (interface_t*)(malloc(sizeof(interface_t)));
+    node_t* node = new node_t();
+    node->intf[0] = new interface_t();
     strncpy(node->intf[0]->if_name, "eth0", strlen("eth0"));
     node->intf[0]->if_name[strlen("eth0")]='\0';
 
-    node->intf[1] = (interface_t*)(malloc(sizeof(interface_t)));
+    node->intf[1] = new interface_t();
     strncpy(node->intf[1]->if_name, "eth1", strlen("eth1"));
     node->intf[1]->if_name[strlen("eth1")]='\0';
 
@@ -193,7 +194,7 @@ TEST(TestGraph, TestGiveGraphAndNodeNameReturnNodeObject){
 
     char name_node1[] = "node1";
     node_t* node1 = create_graph_node(graph, name_node1);
-    
+
     char name_node2[] = "node2";
     node_t* node2 = create_graph_node(graph, name_node2);
 
@@ -201,5 +202,16 @@ TEST(TestGraph, TestGiveGraphAndNodeNameReturnNodeObject){
     node_t* ret_node = get_node_by_node_name(graph, target_node_name);
 
     EXPECT_STREQ(ret_node->node_name, "node2");
+}
+
+TEST(TestGraph, CreateNewNodeAllStateInit){
+    node_t* node = new node_t();
+    ASSERT_EQ(node->graph_glue.left, nullptr);
+    ASSERT_EQ(node->graph_glue.right, nullptr);
+    ASSERT_EQ(node->intf[0], nullptr);
+    ASSERT_EQ(node->intf[9], nullptr);
+    ASSERT_STREQ(node->node_name, "");
+    ASSERT_FALSE(node->node_nw_prop.is_lb_addr_config);
+    ASSERT_STREQ(node->node_nw_prop.lb_addr.ip_addr, "");
 }
 
