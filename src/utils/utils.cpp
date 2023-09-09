@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iostream>
 #include <stdexcept>
+#include <cstring>
 #include <regex>
 #include <cassert>
 
@@ -51,4 +52,16 @@ void apply_mask(char* prefix, char mask, char* str_prefix){
 bool validate_prefix(const char* input){
     std::regex pattern("(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])");
     return std::regex_match(input, pattern);
+}
+
+
+void layer2_fill_with_broadcast_mac(char* mac_array){
+    const int len = 6;
+    if(!mac_array || strlen(mac_array) != len){
+        throw std::invalid_argument("invalid input prefix");
+        return;
+    }
+
+    for(int i = 0; i < len; ++i)
+        mac_array[i] = 0xFF;
 }
