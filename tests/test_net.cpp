@@ -88,3 +88,17 @@ TEST(TestNet, TestOnInfoDump){
 \t MAC : 0:0:0:0:0:0\n";
     ASSERT_EQ(actual, expected);
 }
+
+TEST(TestNet, GiveIpAddrReturnUnsignedIntForm) {
+    char* ip_addr = "192.168.53.5";
+    unsigned int res = convert_ip_from_str_to_int(ip_addr);
+    unsigned int expected = 3232249093;
+    ASSERT_EQ(res, expected);
+}
+
+TEST(TestNet, GiveUnsignedIntValReturnToIpAddr) {
+    char* output_buffer = new char[20];
+    unsigned int ip_addr = 335610113;
+    convert_ip_from_int_to_str(ip_addr, output_buffer);
+    ASSERT_STREQ(output_buffer, "20.1.1.1");
+}

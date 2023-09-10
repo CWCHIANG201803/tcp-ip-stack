@@ -1,5 +1,5 @@
-#include "net.h"
 #include "graph/graph.h"
+#include "net.h"
 #include "utils/utils.h"
 #include <stdexcept>
 #include <iostream>
@@ -173,4 +173,11 @@ void dump_new_nw_graph(graph_t* graph){
         }
     }
     ITERATE_GLTHREAD_END(&graph->node_list, curr);
+}
+
+unsigned int convert_ip_from_str_to_int(char* ip_addr){
+    return 0;
+}
+
+void convert_ip_from_int_to_str(unsigned int ip_addr, char* output_buffer){
 }

@@ -85,4 +85,6 @@ interface_t* node_get_matching_subnet_interface(node_t* node, char* ip_addr);
 
 void dump_new_nw_graph(graph_t* graph);
 
+unsigned int convert_ip_from_str_to_int(char* ip_addr);
+void convert_ip_from_int_to_str(unsigned int ip_addr, char* output_buffer);
 #endif
