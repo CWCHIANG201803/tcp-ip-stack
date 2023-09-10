@@ -1,5 +1,6 @@
 #include "graph.h"
 #include <stdio.h>
+#include <iostream>
 
 graph_t *create_new_graph(char *topology_name)
 {
@@ -37,6 +38,12 @@ node_t *create_graph_node(graph_t *graph, char *node_name)
     return node;
 }
 
+interface_t* create_node_interface(node_t* node, char* intf_name, char* ip_addr, char mask){
+    interface_t* intf = new interface_t(intf_name, ip_addr, mask);
+    intf->att_node = node;
+    return intf;
+}
+
 void insert_link_between_two_nodes(node_t *node1, node_t *node2, char *from_if_name, char *to_if_name, unsigned int cost)
 {
     link_t *lnk = new link_t();
@@ -67,7 +74,7 @@ void dump_graph(graph_t *graph)
     node_t *node;
     glthread_t *curr;
 
-    printf("Topology Name = %s\n", graph->topology_name);
+    std::cout <<" Topology Name = " << graph->topology_name << std::endl;
 
     ITERATE_GLTHREAD_BEGIN(&graph->node_list, curr)
     {

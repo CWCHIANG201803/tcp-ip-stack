@@ -57,7 +57,7 @@ bool validate_prefix(const char* input){
 
 void layer2_fill_with_broadcast_mac(char* mac_array){
     const int len = 6;
-    if(!mac_array || strlen(mac_array) != len){
+    if(!mac_array){
         throw std::invalid_argument("invalid input prefix");
         return;
     }

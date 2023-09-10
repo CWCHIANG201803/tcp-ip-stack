@@ -2,6 +2,7 @@
 #include "graph/graph.h"
 #include "utils/utils.h"
 #include <stdexcept>
+#include <iostream>
 
 /*Just some Random number generator*/
 // ref: https://github.com/sachinites/tcpip_stack/blob/master/net.c
@@ -23,7 +24,6 @@ static unsigned int hash_code(void *ptr, unsigned int size)
 // ref: https://github.com/sachinites/tcpip_stack/blob/master/net.c
 void interface_assign_mac_address(interface_t *interface)
 {
-
     node_t *node = interface->att_node;
 
     if (!node)
@@ -83,7 +83,7 @@ void dump_nw_graph(graph_t *graph)
     interface_t *interface;
     unsigned int i;
 
-    printf("Topology Name = %s\n", graph->topology_name);
+    std::cout << "Topology Name = " << graph->topology_name << std::endl;
 
     ITERATE_GLTHREAD_BEGIN(&graph->node_list, curr)
     {
@@ -103,13 +103,12 @@ void dump_nw_graph(graph_t *graph)
 
 void dump_node_nw_props(node_t *node)
 {
-
-    printf("\nNode Name = %s\n", node->node_name);
+    std::cout << "\nNode Name = " << node->node_name << std::endl;
     if (node->node_nw_prop.is_lb_addr_config)
     {
-        printf("\t  lo addr : %s/32", NODE_LO_ADDR(node));
+        std::cout << "\t  lo addr : " << NODE_LO_ADDR(node) << "/32" << std::endl;
     }
-    printf("\n");
+    std::cout << std::endl;
 }
 
 void dump_intf_props(interface_t *interface)
@@ -119,11 +118,11 @@ void dump_intf_props(interface_t *interface)
 
     if (interface->intf_nw_props.is_ipadd_config)
     {
-        printf("\t IP Addr = %s/%u", IF_IP(interface), interface->intf_nw_props.mask);
-        printf("\t MAC : %u:%u:%u:%u:%u:%u\n",
-                IF_MAC(interface)[0], IF_MAC(interface)[1],
-                IF_MAC(interface)[2], IF_MAC(interface)[3],
-                IF_MAC(interface)[4], IF_MAC(interface)[5]);
+        std::cout << "\t IP Addr = " << IF_IP(interface) << "/" << interface->intf_nw_props.mask << std::endl;
+        std::cout <<"\t MAC : ";
+        for(int i=0; i < 6; ++i)
+            std::cout <<  std::to_string(int(IF_MAC(interface)[i])) << std::string(i < 5  ? ":" : "");
+        std::cout << std::endl;
     }
 }
 
@@ -154,4 +153,24 @@ interface_t* node_get_matching_subnet_interface(node_t* node, char* ip_addr){
             return node->intf[i];
     }
     return nullptr;
+}
+
+void dump_new_nw_graph(graph_t* graph){
+    node_t *node;
+    glthread_t *curr;
+    interface_t* cur_intf;
+
+    std::cout <<" Topology Name = " << graph->topology_name << std::endl;
+
+    ITERATE_GLTHREAD_BEGIN(&graph->node_list, curr)
+    {
+        node = graph_glue_to_node(curr);
+        dump_node_nw_props(node);
+        for(int i=0; i < MAX_INTF_PER_NODE; ++i){
+            cur_intf = node->intf[i];
+            if(!cur_intf) break;
+            dump_intf_props(cur_intf);
+        }
+    }
+    ITERATE_GLTHREAD_END(&graph->node_list, curr);
 }

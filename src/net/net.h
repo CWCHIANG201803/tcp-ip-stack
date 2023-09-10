@@ -3,7 +3,9 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <string>
 #include "assert.h"
+#include "utils/utils.h"
 
 
 // forward declaration
@@ -20,7 +22,8 @@ typedef struct ip_add_ {
 
 typedef struct mac_add_ {
     mac_add_(){
-        strcpy(mac, "");
+        for(int i=0; i < 8; ++i)
+            mac[i] = 0x0;
     }
     char mac[8];
 } mac_add_t;
@@ -41,10 +44,16 @@ static inline void init_node_nw_prop(node_nw_prop_t* node_nw_prop) {
 
 typedef struct intf_nw_props_ {
     intf_nw_props_() {
-        strcpy(mac_add.mac, "");
+        mac_add = mac_add_t();
         is_ipadd_config = false;
         strcpy(ip_add.ip_addr, "");
         mask = 0x0;
+    }
+    intf_nw_props_(char* _ip_addr, char _mask) {
+        mac_add = mac_add_t();
+        is_ipadd_config = true;
+        strcpy(ip_add.ip_addr, _ip_addr);
+        mask = _mask;
     }
     mac_add_t mac_add;
     bool is_ipadd_config;
@@ -62,7 +71,7 @@ static inline void init_intf_nw_prop(intf_nw_props_t* intf_nw_props){
 #define IF_MAC(intf_ptr)    ((intf_ptr)->intf_nw_props.mac_add.mac)
 #define IF_IP(intf_ptr)    ((intf_ptr)->intf_nw_props.ip_add.ip_addr)
 
-#define NODE_LO_ADDR(node_ptr)    (node_ptr->node_nw_prop.lb_addr.ip_addr)
+#define NODE_LO_ADDR(node_ptr)    ((node_ptr)->node_nw_prop.lb_addr.ip_addr)
 
 bool node_set_loopback_address(node_t* node, char *ip_addr);
 bool node_set_intf_address(node_t* node, char* local_if, char* ip_addr, char mask);
@@ -73,5 +82,7 @@ void dump_node_nw_props(node_t *node);
 void dump_intf_props(interface_t *interface);
 
 interface_t* node_get_matching_subnet_interface(node_t* node, char* ip_addr);
+
+void dump_new_nw_graph(graph_t* graph);
 
 #endif

@@ -24,6 +24,13 @@ typedef struct interface_ { // included in a node. a node may have many interfac
         link = nullptr;
         intf_nw_props = intf_nw_props_t();
     }
+
+    interface_(char* name, char* ip_addr, char mask ){
+        strcpy(if_name, name);
+        att_node = nullptr;
+        link = nullptr;
+        intf_nw_props = intf_nw_props_t(ip_addr, mask);
+    }
     char if_name[IF_NAME_SIZE]; // interface name
     struct node_ *att_node; // attached node
     struct link_ *link; // link with other interfaces
@@ -36,7 +43,7 @@ struct link_ {
         intf2 = interface_t();
         cost = 0;
     }
-    link_(interface_t i1, interface_t i2) : intf1(i1), intf2(i2){}
+    link_(interface_t i1, interface_t i2) : intf1(i1), intf2(i2), cost(0){}
     interface_t intf1;
     interface_t intf2;
     unsigned int cost;
@@ -65,6 +72,8 @@ struct graph_ {
 
 graph_t* create_new_graph(char* topology_name);
 node_t* create_graph_node(graph_t* graph, char* node_name);
+
+interface_t* create_node_interface(node_t* node, char* intf_name, char* ip_addr, char mask);
 
 void insert_link_between_two_nodes(node_t* node1, node_t* node2, char* from_if_name,char* to_if_name, unsigned int cost);
 

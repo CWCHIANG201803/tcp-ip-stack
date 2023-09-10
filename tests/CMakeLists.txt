@@ -39,7 +39,7 @@ add_executable(
     test_net.cpp
 )
 
-target_link_libraries(test_net gtest_main gmock_main glthreads net)
+target_link_libraries(test_net gtest_main gmock_main glthreads net utils)
 
 add_test(
     NAME test_net
