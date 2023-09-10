@@ -3,6 +3,8 @@
 #include "utils/utils.h"
 #include <stdexcept>
 #include <iostream>
+#include <sstream>
+#include <string>
 
 /*Just some Random number generator*/
 // ref: https://github.com/sachinites/tcpip_stack/blob/master/net.c
@@ -176,7 +178,19 @@ void dump_new_nw_graph(graph_t* graph){
 }
 
 unsigned int convert_ip_from_str_to_int(char* ip_addr){
-    return 0;
+    if(!ip_addr || !validate_prefix(ip_addr)) 
+        return -1;
+    
+    unsigned int final_res = 0;
+    unsigned int base = 256;
+    std::string val;
+    std::istringstream iss(ip_addr);
+    while(std::getline(iss, val, '.')){
+        unsigned int num = static_cast<unsigned int>(std::stoi(val));
+        final_res = base*final_res + num;
+    }
+
+    return final_res;
 }
 
 void convert_ip_from_int_to_str(unsigned int ip_addr, char* output_buffer){

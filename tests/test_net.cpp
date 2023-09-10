@@ -90,7 +90,7 @@ TEST(TestNet, TestOnInfoDump){
 }
 
 TEST(TestNet, GiveIpAddrReturnUnsignedIntForm) {
-    char* ip_addr = "192.168.53.5";
+    char ip_addr[] = "192.168.53.5";
     unsigned int res = convert_ip_from_str_to_int(ip_addr);
     unsigned int expected = 3232249093;
     ASSERT_EQ(res, expected);
