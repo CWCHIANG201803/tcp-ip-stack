@@ -97,7 +97,8 @@ TEST(TestNet, GiveIpAddrReturnUnsignedIntForm) {
 }
 
 TEST(TestNet, GiveUnsignedIntValReturnToIpAddr) {
-    char* output_buffer = new char[20];
+    char* output_buffer = new char[16];
+    output_buffer[16] = '\0';
     unsigned int ip_addr = 335610113;
     convert_ip_from_int_to_str(ip_addr, output_buffer);
     ASSERT_STREQ(output_buffer, "20.1.1.1");
