@@ -39,12 +39,7 @@ TEST(TestNet, GiveNodeWithoutInterfaceReturnNullptr){
 
 TEST(TestNet, TestOnInfoDump){
 
-    std::stringstream buffer{};
-    // Save cout's buffer here
-    std::streambuf *sbuf;
-    sbuf = std::cout.rdbuf();
-    // Redirect cout to our stringstream buffer or any other ostream
-    std::cout.rdbuf(buffer.rdbuf());
+testing::internal::CaptureStdout();
 
     char topology_name[]="test_graph";
     graph_t* graph = create_new_graph(topology_name);
@@ -72,18 +67,27 @@ TEST(TestNet, TestOnInfoDump){
     node2->intf[0]->link = &lnk12;
 
     dump_new_nw_graph(graph);
-    std::string actual{buffer.str()};
+
+std::string actual = testing::internal::GetCapturedStdout();
     std::string expected = " Topology Name = test_graph\n\
 \nNode Name = R2\n\
 \t  lo addr : 122.1.1.2/32\n\
-\n\t IP Addr = 10.1.1.2/\x18\n\
+\nInterface Name = eth0/2\n\
+\tNbr Node R1, Local Node : R2, cost = 0\n\
+\t IP Addr = 10.1.1.2/\x18\n\
 \t MAC : 0:0:0:0:0:0\n\
+Interface Name = eth0/3\n\
+\tNbr Node R1, Local Node : R2, cost = 0\n\
 \t IP Addr = 20.1.1.1/\x18\n\
 \t MAC : 0:0:0:0:0:0\n\
 \nNode Name = R1\n\
 \t  lo addr : 122.1.1.1/32\n\
-\n\t IP Addr = 20.1.1.2/\x18\n\
+\nInterface Name = eth0/0\n\
+\tNbr Node R2, Local Node : R1, cost = 0\n\
+\t IP Addr = 20.1.1.2/\x18\n\
 \t MAC : 0:0:0:0:0:0\n\
+Interface Name = eth0/1\n\
+\tNbr Node R2, Local Node : R1, cost = 0\n\
 \t IP Addr = 10.1.1.1/\x18\n\
 \t MAC : 0:0:0:0:0:0\n";
     ASSERT_EQ(actual, expected);
