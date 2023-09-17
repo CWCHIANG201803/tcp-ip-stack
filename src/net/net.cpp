@@ -5,6 +5,9 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <stack>
+
+
 
 /*Just some Random number generator*/
 // ref: https://github.com/sachinites/tcpip_stack/blob/master/net.c
@@ -194,4 +197,16 @@ unsigned int convert_ip_from_str_to_int(char* ip_addr){
 }
 
 void convert_ip_from_int_to_str(unsigned int ip_addr, char* output_buffer){
+    int base = 256;
+    std::stack<std::string> stk;
+    while(ip_addr > 0){
+        stk.push(std::to_string(ip_addr%base));
+        ip_addr = ip_addr / base;
+    }
+    std::stringstream ss;
+    while(!stk.empty()){
+        ss << stk.top() << std::string(stk.size() > 1 ? "." : "");
+        stk.pop();
+    }
+    strcpy(output_buffer, ss.str().c_str());
 }
